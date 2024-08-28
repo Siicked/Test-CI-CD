@@ -3,7 +3,7 @@ name: Deploy to Salesforce Org
 on:
   push:
     branches:
-      - main  # Trigger the workflow on pushes to the master branch
+      - main  # Trigger the workflow on pushes to the main branch
 
 jobs:
   deploy:
@@ -13,7 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Salesforce CLII
+    - name: Install Salesforce CLI
       run: npm install --global sfdx-cli
 
     - name: Authenticate to Salesforce
@@ -21,9 +21,10 @@ jobs:
         SFDX_CONSUMER_KEY: ${{ secrets.SFDX_CONSUMER_KEY }}
         SFDX_CONSUMER_SECRET: ${{ secrets.SFDX_CONSUMER_SECRET }}
         SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
-        GH_PAT: ${{ secrets.GH_PAT }}  # Include the GitHub PAT here if needed for GitHub API calls
+        SFDX_ALIAS: 'my-org-alias'  # Set an alias for the authenticated org
       run: |
-        sfdx auth:oauth:login --setdefaultdevhubusername --instanceurl $SFDX_AUTH_URL --consumerkey $SFDX_CONSUMER_KEY --consumersecret $SFDX_CONSUMER_SECRET
+        echo $SFDX_AUTH_URL > auth_url.txt
+        sfdx auth:sfdxurl:store --setalias $SFDX_ALIAS --sfdxurlfile auth_url.txt --setdefaultusername
 
     - name: Deploy to Salesforce Org
-      run: sfdx force:source:deploy -p force-app
+      run: sfdx force:source:deploy -p force-app --target-org $SFDX_ALIAS
