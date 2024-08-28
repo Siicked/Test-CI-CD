@@ -17,18 +17,9 @@ jobs:
       run: npm install --global sfdx-cli
 
     - name: Authenticate to Salesforce
-      env:
-        SF_ACCESS_TOKEN: ${{ secrets.SF_ACCESS_TOKEN }}
-        SF_ORG_INSTANCE_URL: ${{ secrets.SF_ORG_INSTANCE_URL }}
-        SF_REFRESH_TOKEN: ${{ secrets.SF_REFRESH_TOKEN }}
-        SF_CLIENT_ID: ${{ secrets.SF_CLIENT_ID }}
-        SF_CLIENT_SECRET: ${{ secrets.SF_CLIENT_SECRET }}
       run: |
-        # Format the auth URL
-        echo "force://${{ secrets.SF_CLIENT_ID }}:${{ secrets.SF_CLIENT_SECRET }}:${{ secrets.SF_REFRESH_TOKEN }}@${{ secrets.SF_ORG_INSTANCE_URL }}" > auth_url.txt
-        
-        # Run the authentication command
-        sfdx auth sfdxurl store --sfdx-url-file auth_url.txt --alias myorg --set-default
+        # Authenticate using the existing auth_url.txt file
+        sfdx auth:sfdxurl:store --sfdx-url-file auth_url.txt --alias myorg --set-default
 
     - name: Deploy to Salesforce Org
       run: sfdx force:source:deploy -p force-app --target-org myorg
