@@ -3,7 +3,7 @@ name: Deploy to Salesforce Org
 on:
   push:
     branches:
-      - master  # Trigger the workflow on pushes to the master branch
+      - main  # Trigger the workflow on pushes to the master branch
 
 jobs:
   deploy:
