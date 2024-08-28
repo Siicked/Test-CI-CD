@@ -1,5 +1,5 @@
-public with sharing class xd {
-    public xd() {
+public with sharing class xD {
+    public xD() {
 
     }
 }
