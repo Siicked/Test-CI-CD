@@ -21,6 +21,7 @@ jobs:
         SFDX_CONSUMER_KEY: ${{ secrets.SFDX_CONSUMER_KEY }}
         SFDX_CONSUMER_SECRET: ${{ secrets.SFDX_CONSUMER_SECRET }}
         SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+        GH_PAT: ${{ secrets.GH_PAT }}  # Include the GitHub PAT here if needed for GitHub API calls
       run: |
         sfdx auth:oauth:login --setdefaultdevhubusername --instanceurl $SFDX_AUTH_URL --consumerkey $SFDX_CONSUMER_KEY --consumersecret $SFDX_CONSUMER_SECRET
 
