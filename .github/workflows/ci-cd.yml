@@ -24,11 +24,11 @@ jobs:
         SF_CLIENT_ID: ${{ secrets.SF_CLIENT_ID }}
         SF_CLIENT_SECRET: ${{ secrets.SF_CLIENT_SECRET }}
       run: |
-        # Format the auth URL for sf CLI
+        # Create a URL for authentication
         echo "force://${{ secrets.SF_CLIENT_ID }}:${{ secrets.SF_CLIENT_SECRET }}:${{ secrets.SF_REFRESH_TOKEN }}@${{ secrets.SF_ORG_INSTANCE_URL }}" > auth_url.txt
-
+        
         # Authenticate using the sf CLI
-        sf auth:web:login --set-default-org --alias default
+        sf auth:jwt:grant --client-id ${{ secrets.SF_CLIENT_ID }} --jwt-key-file /path/to/private.key --username ${{ secrets.SF_USERNAME }} --set-default-org
 
     - name: Deploy to Salesforce Org
       run: sf project deploy start --source-path force-app --target-org default
