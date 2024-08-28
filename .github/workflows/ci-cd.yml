@@ -23,7 +23,7 @@ jobs:
         SF_REFRESH_TOKEN: ${{ secrets.SF_REFRESH_TOKEN }}
       run: |
         echo "force://${{ secrets.SF_CLIENT_ID }}:${{ secrets.SF_CLIENT_SECRET }}:${{ secrets.SF_REFRESH_TOKEN }}@${{ secrets.SF_ORG_INSTANCE_URL }}" > auth_url.txt
-        sfdx auth:sfdx-url:store --sfdx-url-file auth_url.txt --alias default --set-default
+        sfdx auth sfdxurl store --sfdx-url-file auth_url.txt --alias default --set-default
 
     - name: Deploy to Salesforce Org
       run: sfdx force:source:deploy -p force-app --target-org default
