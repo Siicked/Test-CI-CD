@@ -14,7 +14,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install Salesforce CLI
-      run: npm install --global sfdx-cli
+      run: npm install --global @salesforce/cli
 
     - name: Authenticate to Salesforce
       env:
@@ -24,11 +24,11 @@ jobs:
         SF_CLIENT_ID: ${{ secrets.SF_CLIENT_ID }}
         SF_CLIENT_SECRET: ${{ secrets.SF_CLIENT_SECRET }}
       run: |
-        # Format the auth URL
+        # Format the auth URL for sf CLI
         echo "force://${{ secrets.SF_CLIENT_ID }}:${{ secrets.SF_CLIENT_SECRET }}:${{ secrets.SF_REFRESH_TOKEN }}@${{ secrets.SF_ORG_INSTANCE_URL }}" > auth_url.txt
         
-        # Run the authentication command
-        sfdx auth:sfdx-url:store --sfdx-url-file auth_url.txt --alias default --set-default
+        # Authenticate using the sf CLI
+        sf login url --sfdx-url-file auth_url.txt --set-default
 
     - name: Deploy to Salesforce Org
-      run: sfdx force:source:deploy -p force-app --target-org default
+      run: sf project deploy start --source-path force-app --target-org default
