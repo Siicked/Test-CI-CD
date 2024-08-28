@@ -3,7 +3,7 @@ name: Deploy to Salesforce Org
 on:
   push:
     branches:
-      - main  # Trigger the workflow on pushes to the main branch
+      - main
 
 jobs:
   deploy:
@@ -18,15 +18,11 @@ jobs:
 
     - name: Authenticate to Salesforce
       env:
-        SFDX_CONSUMER_KEY: ${{ secrets.SFDX_CONSUMER_KEY }}
-        SFDX_CONSUMER_SECRET: ${{ secrets.SFDX_CONSUMER_SECRET }}
-        SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
-        SFDX_ALIAS: ${{ secrets.SFDX_ALIAS }}
+        SFDX_ACCESS_TOKEN: ${{ secrets.SFDX_ACCESS_TOKEN }}
+        SFDX_INSTANCE_URL: ${{ secrets.SFDX_INSTANCE_URL }}
       run: |
-        # Store the authentication URL in a file
-        echo $SFDX_AUTH_URL > auth_url.txt
-        # Authenticate to Salesforce
-        sfdx auth:sfdxurl:store --setalias $SFDX_ALIAS --sfdxurlfile auth_url.txt --setdefaultusername
+        echo "force://$SFDX_ACCESS_TOKEN:@$SFDX_INSTANCE_URL" > auth_url.txt
+        sfdx auth:sfdxurl:store --sfdxurlfile auth_url.txt --setdefaultusername
 
     - name: Deploy to Salesforce Org
-      run: sfdx force:source:deploy -p force-app --target-org $SFDX_ALIAS
+      run: sfdx force:source:deploy -p force-app --target-org default
