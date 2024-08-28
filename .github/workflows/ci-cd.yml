@@ -26,9 +26,9 @@ jobs:
       run: |
         # Format the auth URL for sf CLI
         echo "force://${{ secrets.SF_CLIENT_ID }}:${{ secrets.SF_CLIENT_SECRET }}:${{ secrets.SF_REFRESH_TOKEN }}@${{ secrets.SF_ORG_INSTANCE_URL }}" > auth_url.txt
-        
+
         # Authenticate using the sf CLI
-        sf login url --sfdx-url-file auth_url.txt --set-default
+        sf auth:web:login --set-default-org --alias default
 
     - name: Deploy to Salesforce Org
       run: sf project deploy start --source-path force-app --target-org default
